@@ -9,11 +9,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-//CreateUser ... Create User
-func CreateUser(c *gin.Context) {
+//CreateTask ... Create Task
+func CreateTask(c *gin.Context) {
 	var task models.Task
 	c.BindJSON(&task)
-	err := models.CreateUser(&task)
+	err := models.CreateTask(&task)
 	if err != nil {
 		fmt.Println(err.Error())
 		c.AbortWithStatus(http.StatusNotFound)

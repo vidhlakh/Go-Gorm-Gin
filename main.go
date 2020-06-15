@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"go-gorm-gin/config"
+	"go-gorm-gin/models"
+	"go-gorm-gin/routes"
 
 	"github.com/jinzhu/gorm"
 )
@@ -15,4 +17,8 @@ func main() {
 		fmt.Println("Status:", err)
 	}
 	defer config.DB.Close()
+	config.DB.AutoMigrate(&models.Task{})
+	r := routes.SetupRouter()
+	//running
+	r.Run()
 }
