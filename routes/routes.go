@@ -10,13 +10,14 @@ import (
 //SetupRouter ... Configure routes
 func SetupRouter() *gin.Engine {
 	r := gin.Default()
-	grp1 := r.Group("/user-api")
+	grp1 := r.Group("/todolist")
 	{
-		//grp1.GET("user", controllers.GetUsers)
-		grp1.POST("user", controllers.CreateUser)
-		// grp1.GET("user/:id", controllers.GetUserByID)
-		// grp1.PUT("user/:id", controllers.UpdateUser)
-		// grp1.DELETE("user/:id", controllers.DeleteUser)
+		grp1.GET("task", controllers.GetAllTasks)
+		grp1.POST("task", controllers.CreateTask)
+		grp1.GET("task/:id", controllers.GetTaskByID)
+		//grp1.GET("task/:taskstatus", controllers.GetTaskByTaskstatus)
+		grp1.PUT("task/:id", controllers.UpdateTask)
+		grp1.DELETE("task/:id", controllers.DeleteTask)
 	}
 	return r
 }
