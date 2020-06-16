@@ -2,8 +2,8 @@
 package controllers
 
 import (
-	"fmt"
 	"go-gorm-gin/models"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -12,23 +12,27 @@ import (
 //GetAllTasks ... Get all tasks
 func GetAllTasks(c *gin.Context) {
 
-	var user []models.Task
-	err := models.GetAllTasks(&user)
+	var task []models.Task
+	err := models.GetAllTasks(&task)
 	if err != nil {
-		c.AbortWithStatus(http.StatusNotFound)
+		//c.AbortWithStatus(http.StatusNotFound)
+		c.JSON(http.StatusNotFound, gin.H{"error": err})
 	} else {
-		c.JSON(http.StatusOK, user)
+		c.JSON(http.StatusOK, task)
 	}
 }
 
 //CreateTask ... Create Task
 func CreateTask(c *gin.Context) {
 	var task models.Task
-	c.BindJSON(&task)
+
+	c.ShouldBindJSON(&task)
 	err := models.CreateTask(&task)
 	if err != nil {
-		fmt.Println(err.Error())
-		c.AbortWithStatus(http.StatusNotFound)
+		c.JSON(http.StatusNotFound, gin.H{"error in POST:": err.Error()})
+		log.Fatal(err.Error())
+		//fmt.Println(err.Error())
+		//c.AbortWithStatus(http.StatusNotFound)
 	} else {
 		c.JSON(http.StatusOK, task)
 	}
@@ -37,12 +41,14 @@ func CreateTask(c *gin.Context) {
 //GetTaskByID ... Get the task by id
 func GetTaskByID(c *gin.Context) {
 	id := c.Params.ByName("id")
-	var user models.Task
-	err := models.GetTaskByID(&user, id)
+	var task models.Task
+	err := models.GetTaskByID(&task, id)
 	if err != nil {
-		c.AbortWithStatus(http.StatusNotFound)
+		c.JSON(http.StatusNotFound, gin.H{"error in GET:": err.Error()})
+		log.Fatal(err.Error())
+		//c.AbortWithStatus(http.StatusNotFound)
 	} else {
-		c.JSON(http.StatusOK, user)
+		c.JSON(http.StatusOK, task)
 	}
 }
 
@@ -64,12 +70,16 @@ func UpdateTask(c *gin.Context) {
 	id := c.Params.ByName("id")
 	err := models.GetTaskByID(&task, id)
 	if err != nil {
-		c.JSON(http.StatusNotFound, task)
+		c.JSON(http.StatusNotFound, gin.H{"error in PUT reg ID:": err.Error()})
+		log.Fatal(err)
+		//c.JSON(http.StatusNotFound, task)
 	}
 	c.BindJSON(&task)
 	err = models.UpdateTask(&task, id)
 	if err != nil {
-		c.AbortWithStatus(http.StatusNotFound)
+		c.JSON(http.StatusNotFound, gin.H{"error in PUT:": err.Error()})
+		log.Fatal(err)
+		//c.AbortWithStatus(http.StatusNotFound)
 	} else {
 		c.JSON(http.StatusOK, task)
 	}
@@ -81,7 +91,9 @@ func DeleteTask(c *gin.Context) {
 	id := c.Params.ByName("id")
 	err := models.DeleteTask(&task, id)
 	if err != nil {
-		c.AbortWithStatus(http.StatusNotFound)
+		c.JSON(http.StatusNotFound, gin.H{"error in Delete:": err.Error()})
+		log.Fatal(err)
+		//c.AbortWithStatus(http.StatusNotFound)
 	} else {
 		c.JSON(http.StatusOK, gin.H{"id" + id: "is deleted"})
 	}

@@ -1,0 +1,4 @@
+2020/06/15 18:47:11 Error 1292: Incorrect datetime value: '0000-00-00' for column 'deadline' at row 1
+2020/06/16 11:38:21 Error 1292: Incorrect datetime value: '0000-00-00' for column 'deadline' at row 1
+2020/06/16 11:40:36 Error 1292: Incorrect datetime value: '0000-00-00' for column 'deadline' at row 1
+2020/06/16 11:47:18 Error 1292: Incorrect datetime value: '0000-00-00' for column 'deadline' at row 1

@@ -7,8 +7,9 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-//GetAlltasks Fetch all task data
+//GetAllTasks  Fetch all task data
 func GetAllTasks(task *[]Task) (err error) {
+
 	if err = config.DB.Find(task).Error; err != nil {
 		return err
 	}
@@ -17,6 +18,7 @@ func GetAllTasks(task *[]Task) (err error) {
 
 //CreateTask ... Insert New data
 func CreateTask(task *Task) (err error) {
+
 	if err = config.DB.Create(task).Error; err != nil {
 		return err
 	}

@@ -12,10 +12,10 @@ import (
 // Task struct is the object to be passed as JSON to finally get stored in user table
 type Task struct {
 	gorm.Model
-	Name        string    `json:"name"`
+	Name        string    `json:"name" binding:"required"`
 	Description string    `json:"description"`
-	Deadline    time.Time `json:"deadline" `
-	Taskstatus  string    `json:"taskstatus"`
+	Deadline    time.Time `json:"deadline" binding:"required"`
+	Taskstatus  string    `json:"taskstatus" default:"Active"`
 }
 
 //Sample JSON message
