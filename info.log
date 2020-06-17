@@ -2,3 +2,15 @@
 2020/06/16 11:38:21 Error 1292: Incorrect datetime value: '0000-00-00' for column 'deadline' at row 1
 2020/06/16 11:40:36 Error 1292: Incorrect datetime value: '0000-00-00' for column 'deadline' at row 1
 2020/06/16 11:47:18 Error 1292: Incorrect datetime value: '0000-00-00' for column 'deadline' at row 1
+2020/06/16 12:42:55 parsing time "" as "2006-01-02T15:04:05Z07:00": cannot parse "" as "2006"
+2020/06/16 12:45:23 parsing time "" as "2006-01-02T15:04:05Z07:00": cannot parse "" as "2006"
+2020/06/16 12:56:06 Error 1292: Incorrect datetime value: '0000-00-00' for column 'deadline' at row 1
+2020/06/16 19:18:46 record not found
+2020/06/16 19:23:54 record not found
+2020/06/16 21:37:29 record not found
+2020/06/16 21:39:44 record not found
+2020/06/16 21:49:05 Error 1062: Duplicate entry '1' for key 'tasks.PRIMARY'
+2020/06/16 22:04:48 Error 1062: Duplicate entry '1' for key 'tasks.PRIMARY'
+2020/06/16 22:08:51 Error 1062: Duplicate entry '1' for key 'tasks.PRIMARY'
+2020/06/16 22:09:05 Error 1062: Duplicate entry '1' for key 'tasks.PRIMARY'
+2020/06/16 22:12:31 Error 1062: Duplicate entry '1' for key 'tasks.PRIMARY'

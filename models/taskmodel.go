@@ -5,16 +5,14 @@ package models
 
 import (
 	"time"
-
-	"github.com/jinzhu/gorm"
 )
 
 // Task struct is the object to be passed as JSON to finally get stored in user table
 type Task struct {
-	gorm.Model
+	ID          int       `json:"id" gorm:"PRIMARY_KEY"`
 	Name        string    `json:"name" binding:"required"`
 	Description string    `json:"description"`
-	Deadline    time.Time `json:"deadline" binding:"required"`
+	Deadline    time.Time `json:"deadline,omitempty" `
 	Taskstatus  string    `json:"taskstatus" default:"Active"`
 }
 

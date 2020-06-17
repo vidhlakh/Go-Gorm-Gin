@@ -2,9 +2,11 @@
 package controllers
 
 import (
+	"fmt"
 	"go-gorm-gin/models"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -13,10 +15,11 @@ import (
 func GetAllTasks(c *gin.Context) {
 
 	var task []models.Task
+
 	err := models.GetAllTasks(&task)
 	if err != nil {
 		//c.AbortWithStatus(http.StatusNotFound)
-		c.JSON(http.StatusNotFound, gin.H{"error": err})
+		c.JSON(http.StatusNotFound, gin.H{"message": err})
 	} else {
 		c.JSON(http.StatusOK, task)
 	}
@@ -25,16 +28,30 @@ func GetAllTasks(c *gin.Context) {
 //CreateTask ... Create Task
 func CreateTask(c *gin.Context) {
 	var task models.Task
-
 	c.ShouldBindJSON(&task)
-	err := models.CreateTask(&task)
-	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error in POST:": err.Error()})
-		log.Fatal(err.Error())
-		//fmt.Println(err.Error())
-		//c.AbortWithStatus(http.StatusNotFound)
+
+	// If deadline time format is wrong/ empty, consider the time.Now()
+	value, present := c.GetPostForm("Deadline")
+	if present {
+		fmt.Println("Value:", value)
+		deadline, err := time.Parse(time.RFC3339, value)
+		if err != nil {
+			fmt.Println("Error in deadline:", err)
+			log.Print(err)
+
+		}
+		task.Deadline = deadline
 	} else {
-		c.JSON(http.StatusOK, task)
+		task.Deadline = time.Now()
+	}
+
+	err1 := models.CreateTask(&task)
+	if err1 != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": err1.Error()})
+		log.Print(err1.Error())
+
+	} else {
+		c.JSON(http.StatusCreated, task)
 	}
 }
 
@@ -44,25 +61,13 @@ func GetTaskByID(c *gin.Context) {
 	var task models.Task
 	err := models.GetTaskByID(&task, id)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error in GET:": err.Error()})
-		log.Fatal(err.Error())
-		//c.AbortWithStatus(http.StatusNotFound)
+		c.JSON(http.StatusNotFound, gin.H{"message": err.Error()}) //record not found
+		log.Print(err.Error())
+
 	} else {
 		c.JSON(http.StatusOK, task)
 	}
 }
-
-// //GetTaskByTaskstatus ... Get the task by status
-// func GetTaskByTaskstatus(c *gin.Context) {
-// 	status := c.Params.ByName("taskstatus")
-// 	var task models.Task
-// 	err := models.GetTaskByTaskstatus(&task, status)
-// 	if err != nil {
-// 		c.AbortWithStatus(http.StatusNotFound)
-// 	} else {
-// 		c.JSON(http.StatusOK, task)
-// 	}
-// }
 
 //UpdateTask ... Update the task information
 func UpdateTask(c *gin.Context) {
@@ -70,18 +75,18 @@ func UpdateTask(c *gin.Context) {
 	id := c.Params.ByName("id")
 	err := models.GetTaskByID(&task, id)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error in PUT reg ID:": err.Error()})
-		log.Fatal(err)
+		c.JSON(http.StatusNotFound, gin.H{"message": err.Error()})
+		log.Print(err.Error())
 		//c.JSON(http.StatusNotFound, task)
 	}
 	c.BindJSON(&task)
 	err = models.UpdateTask(&task, id)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error in PUT:": err.Error()})
-		log.Fatal(err)
+		c.JSON(http.StatusNotFound, gin.H{"message": err.Error()})
+		log.Print(err.Error())
 		//c.AbortWithStatus(http.StatusNotFound)
 	} else {
-		c.JSON(http.StatusOK, task)
+		c.JSON(http.StatusAccepted, task)
 	}
 }
 
@@ -91,8 +96,8 @@ func DeleteTask(c *gin.Context) {
 	id := c.Params.ByName("id")
 	err := models.DeleteTask(&task, id)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error in Delete:": err.Error()})
-		log.Fatal(err)
+		c.JSON(http.StatusNotFound, gin.H{"message": err.Error()})
+		log.Print(err.Error())
 		//c.AbortWithStatus(http.StatusNotFound)
 	} else {
 		c.JSON(http.StatusOK, gin.H{"id" + id: "is deleted"})
